@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ArtushockEnglishDictionary</string>
+    <string name="translation_image">Translation image</string>
+    <string name="reload">Reload</string>
+</resources>
