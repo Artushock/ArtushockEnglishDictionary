@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.artushock.artushockenglishdictionary.R
 import com.artushock.artushockenglishdictionary.databinding.SearchFragmentBinding
 
-class SearchFragment : Fragment(), SearchView {
+class SearchFragment : Fragment() {
 
     private var _binding: SearchFragmentBinding? = null
     private val binding get() = _binding!!
@@ -32,7 +32,7 @@ class SearchFragment : Fragment(), SearchView {
         }
     }
 
-    override fun sendRequest(word: String) {
+    private fun sendRequest(word: String) {
         parentFragmentManager.beginTransaction()
             .replace(R.id.main_container, ResultFragment(word))
             .addToBackStack(null)
