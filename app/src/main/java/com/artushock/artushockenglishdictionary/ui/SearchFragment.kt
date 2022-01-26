@@ -34,8 +34,14 @@ class SearchFragment : Fragment() {
 
     private fun sendRequest(word: String) {
         parentFragmentManager.beginTransaction()
-            .replace(R.id.main_container, ResultFragment(word))
+            .replace(R.id.main_container, ResultFragment.newInstance(word))
             .addToBackStack(null)
             .commit()
+    }
+
+    companion object {
+        fun newInstance(): SearchFragment {
+            return SearchFragment()
+        }
     }
 }

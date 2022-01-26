@@ -1,23 +1,13 @@
-package com.artushock.artushockenglishdictionary.presenters
+package com.artushock.artushockenglishdictionary.viewModels
 
-import android.media.MediaPlayer
 import androidx.lifecycle.LiveData
-import com.artushock.artushockenglishdictionary.data.repository.RepositoryImpl
-import com.artushock.artushockenglishdictionary.data.repository.local.RoomImpl
-import com.artushock.artushockenglishdictionary.data.repository.remote.RetrofitImpl
 import com.artushock.artushockenglishdictionary.entities.AppState
 import com.artushock.artushockenglishdictionary.interactors.ResultInteractor
-import com.artushock.artushockenglishdictionary.interactors.ResultInteractorImpl
-import com.artushock.artushockenglishdictionary.ui.MainActivity
 import io.reactivex.observers.DisposableObserver
+import javax.inject.Inject
 
-class ResultViewModel(
-    private val interactor: ResultInteractor<AppState> = ResultInteractorImpl(
-        repository = RepositoryImpl(
-            localRepository = RoomImpl(),
-            remoteRepository = RetrofitImpl()
-        )
-    )
+class ResultViewModel @Inject constructor(
+    private val interactor: ResultInteractor<AppState>
 ) : BaseViewModel<AppState>() {
 
     override fun getTranslations(word: String): LiveData<AppState> {
