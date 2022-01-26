@@ -1,4 +1,4 @@
-package com.artushock.artushockenglishdictionary.presenters
+package com.artushock.artushockenglishdictionary.viewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
