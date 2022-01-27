@@ -1,30 +1,69 @@
 package com.artushock.artushockenglishdictionary.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artushock.artushockenglishdictionary.databinding.ResultFragmentBinding
 import com.artushock.artushockenglishdictionary.entities.AppState
-import com.artushock.artushockenglishdictionary.presenters.ResultPresenter
-import com.artushock.artushockenglishdictionary.presenters.ResultPresenterImpl
 import com.artushock.artushockenglishdictionary.ui.model.Mapper
+import com.artushock.artushockenglishdictionary.ui.model.Translation
 import com.artushock.artushockenglishdictionary.ui.recycler.ResultAdapter
+import com.artushock.artushockenglishdictionary.viewModels.ResultViewModel
+import dagger.android.support.AndroidSupportInjection
+import javax.inject.Inject
 
-class ResultFragment(
-    val word: String,
-) : BaseResultFragment(), ResultView {
+class ResultFragment() : BaseFragment<AppState>() {
+
+    private lateinit var word: String
 
     private var _binding: ResultFragmentBinding? = null
     private val binding get() = _binding!!
 
     private var adapter: ResultAdapter? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        presenter.getTranslations(word)
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+    override lateinit var viewModel: ResultViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        AndroidSupportInjection.inject(this)
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        word = requireArguments().getString(TRANSLATION_WORD)!!
+
+
+        viewModel = viewModelFactory.create(ResultViewModel::class.java)
+        viewModel.getTranslations(word).observe(viewLifecycleOwner, {
+            renderData(it)
+        })
+    }
+
+    override fun renderData(appState: AppState) {
+        when (appState) {
+            is AppState.Success -> {
+                val translations = Mapper().convertDataListToTranslationList(
+                    appState.data
+                )
+                showResult(translations)
+            }
+            is AppState.Error -> {
+                showError(appState.error.message.toString())
+            }
+            is AppState.Loading -> {
+                showViewLoading()
+            }
+
+        }
     }
 
     override fun onCreateView(
@@ -36,55 +75,32 @@ class ResultFragment(
         return binding.root
     }
 
-    override fun createPresenter(): ResultPresenter<ResultView> {
-        return ResultPresenterImpl()
-    }
-
-    override fun showResult(appState: AppState) {
+    private fun showResult(translations: List<Translation>) {
         showViewSuccess()
-        when (appState) {
-            is AppState.Success -> {
-                val translations = Mapper().convertDataListToTranslationList(
-                    appState.data
-                )
 
-                when {
-                    (translations.isNullOrEmpty()) -> {
-                        showError("Error: Response from server is empty")
-                    }
-                    adapter == null -> {
-                        with(binding.resultFragmentRecyclerView) {
-                            layoutManager = LinearLayoutManager(requireContext())
-                            adapter = ResultAdapter(translations)
-                        }
-                    }
-                    else -> {
-                        adapter!!.setData(translations)
-                    }
-                }
+        if (translations.isNullOrEmpty()) {
+            showError("Error: Response from server is empty")
+            return
+        }
+
+        if (adapter == null) {
+            with(binding.resultFragmentRecyclerView) {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = ResultAdapter(translations)
             }
-            is AppState.Error -> {
-                showError(appState.error.message.toString())
-            }
-            is AppState.Loading -> {
-                showProgress()
-            }
+        } else {
+            adapter!!.setData(translations)
         }
     }
 
-    override fun showError(errorMessage: String) {
+    private fun showError(errorMessage: String) {
         showErrorView()
         binding.resultFragmentErrorText.text = errorMessage
         binding.resultFragmentErrorReloadButton.setOnClickListener(getReloadListener())
     }
 
     private fun getReloadListener() = OnClickListener {
-        presenter.getTranslations(word)
-    }
-
-
-    override fun showProgress() {
-        showViewLoading()
+        viewModel.getTranslations(word)
     }
 
     private fun showViewSuccess() {
@@ -105,4 +121,20 @@ class ResultFragment(
         binding.resultFragmentErrorContainer.visibility = VISIBLE
         binding.resultFragmentProgressBar.visibility = GONE
     }
+
+    companion object {
+        private const val TRANSLATION_WORD = "TRANSLATION_WORD"
+
+        fun newInstance(word: String): ResultFragment {
+            val args = Bundle().apply {
+                putString(TRANSLATION_WORD, word)
+            }
+            val fragment = ResultFragment()
+            fragment.arguments = args
+
+            return fragment
+        }
+    }
 }
+
+
