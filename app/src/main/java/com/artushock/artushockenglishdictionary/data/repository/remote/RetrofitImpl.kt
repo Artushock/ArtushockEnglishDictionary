@@ -9,7 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitImpl : RemoteRepository {
+class RetrofitImpl : RemoteRepository<List<RemoteDataModel>> {
 
     override fun getTranslations(word: String): Observable<List<RemoteDataModel>> {
         return getService(BaseInterceptor.interceptor).search(word)

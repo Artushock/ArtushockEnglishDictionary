@@ -1,4 +1,6 @@
 package com.artushock.artushockenglishdictionary.data.repository.local
 
-class RoomImpl : LocalRepository {}
+import com.artushock.artushockenglishdictionary.data.repository.remote.data.RemoteDataModel
+
+class RoomImpl : LocalRepository<List<RemoteDataModel>> {}
 

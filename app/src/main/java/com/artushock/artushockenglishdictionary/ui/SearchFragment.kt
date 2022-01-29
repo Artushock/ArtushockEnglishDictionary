@@ -16,7 +16,7 @@ class SearchFragment : Fragment(), SearchView {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         _binding = SearchFragmentBinding.inflate(inflater, container, false)
@@ -34,7 +34,7 @@ class SearchFragment : Fragment(), SearchView {
 
     override fun sendRequest(word: String) {
         parentFragmentManager.beginTransaction()
-            .replace(R.id.main_container, ResultFragment(word))
+            .replace(R.id.main_container, ResultFragment.newInstance(word))
             .addToBackStack(null)
             .commit()
     }

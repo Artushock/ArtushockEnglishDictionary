@@ -1,12 +1,12 @@
 package com.artushock.artushockenglishdictionary.interactors
 
-import android.util.Log
 import com.artushock.artushockenglishdictionary.data.repository.Repository
 import com.artushock.artushockenglishdictionary.entities.AppState
+import com.artushock.artushockenglishdictionary.entities.DataModel
 import io.reactivex.Observable
 
 class ResultInteractorImpl(
-    val repository: Repository
+    val repository: Repository<List<DataModel>>
 ) : ResultInteractor<AppState>{
 
     override fun getTranslation(word: String): Observable<AppState> {
