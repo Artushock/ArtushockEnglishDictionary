@@ -3,14 +3,12 @@ package com.artushock.artushockenglishdictionary.interactors
 import com.artushock.artushockenglishdictionary.data.repository.Repository
 import com.artushock.artushockenglishdictionary.entities.AppState
 import com.artushock.artushockenglishdictionary.entities.DataModel
-import io.reactivex.Observable
 
 class ResultInteractorImpl(
-    val repository: Repository<List<DataModel>>
-) : ResultInteractor<AppState>{
+    val repository: Repository<List<DataModel>>,
+) : ResultInteractor<AppState> {
 
-    override fun getTranslation(word: String): Observable<AppState> {
-        return repository.getTranslations(word)
-            .map { AppState.Success(it) }
+    override suspend fun getTranslation(word: String): AppState {
+        return AppState.Success(repository.getTranslations(word))
     }
 }

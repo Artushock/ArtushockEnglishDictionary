@@ -44,6 +44,21 @@ class ResultFragment : BaseResultFragment(), ResultView {
         return requireArguments().getString(WORD_FOR_TRANSLATION_KEY, "")
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putParcelableArrayList(TRANSLATION_STATE_KEY,
+            translations as ArrayList<out Translation>)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        savedInstanceState?.let {
+            translations = it.getParcelableArrayList(TRANSLATION_STATE_KEY)
+        }
+    }
+
     override fun showResult(appState: AppState) {
         showViewSuccess()
         when (appState) {
@@ -62,21 +77,6 @@ class ResultFragment : BaseResultFragment(), ResultView {
             is AppState.Loading -> {
                 showProgress()
             }
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putParcelableArrayList(TRANSLATION_STATE_KEY,
-            translations as ArrayList<out Translation>)
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-
-        savedInstanceState?.let {
-            translations = it.getParcelableArrayList(TRANSLATION_STATE_KEY)
         }
     }
 

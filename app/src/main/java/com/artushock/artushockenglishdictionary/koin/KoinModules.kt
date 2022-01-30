@@ -39,7 +39,7 @@ val application = module {
 
     factory { SchedulerProviderImpl() } bind SchedulerProvider::class
 
-    factory<ResultPresenter<ResultView>> { ResultPresenterImpl(get(), get(), get()) }
+    factory<ResultPresenter<ResultView>> { ResultPresenterImpl(get()) }
 
 
 }
