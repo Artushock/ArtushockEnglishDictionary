@@ -30,6 +30,13 @@ class SearchFragment : Fragment(), SearchView {
             val word = binding.searchFragmentTextField.text.toString()
             sendRequest(word)
         }
+
+        binding.searchFragmentHistoryButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_container, HistoryFragment.newInstance())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     override fun sendRequest(word: String) {
