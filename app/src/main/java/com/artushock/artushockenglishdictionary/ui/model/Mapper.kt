@@ -1,6 +1,6 @@
 package com.artushock.artushockenglishdictionary.ui.model
 
-import com.artushock.artushockenglishdictionary.entities.DataModel
+import com.artushock.models.entities.DataModel
 
 class Mapper {
 

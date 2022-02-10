@@ -3,8 +3,8 @@ package com.artushock.artushockenglishdictionary.ui.recycler
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.artushock.artushockenglishdictionary.data.repository.local.room.HistoryEntity
 import com.artushock.artushockenglishdictionary.databinding.HistoryItemBinding
+import com.artushock.repository.repository.local.room.HistoryEntity
 
 class HistoryAdapter(
     private var historyDataList: List<HistoryEntity>,

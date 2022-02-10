@@ -4,14 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.artushock.artushockenglishdictionary.R
-import com.artushock.artushockenglishdictionary.data.repository.local.room.HistoryEntity
 import com.artushock.artushockenglishdictionary.databinding.HistoryFragmentBinding
-import com.artushock.artushockenglishdictionary.databinding.ResultFragmentBinding
 import com.artushock.artushockenglishdictionary.ui.recycler.HistoryAdapter
-import com.artushock.artushockenglishdictionary.ui.recycler.ResultAdapter
+import com.artushock.repository.repository.local.room.HistoryEntity
 
 class HistoryFragment : BaseHistoryFragment(), HistoryView {
 
@@ -24,7 +21,7 @@ class HistoryFragment : BaseHistoryFragment(), HistoryView {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = HistoryFragmentBinding.inflate(inflater, container, false)
         return binding.root
@@ -50,7 +47,7 @@ class HistoryFragment : BaseHistoryFragment(), HistoryView {
         if (adapter == null) {
             with(binding.historyFragmentRecyclerView) {
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = HistoryAdapter(list, object : HistoryAdapter.ItemClickListener{
+                adapter = HistoryAdapter(list, object : HistoryAdapter.ItemClickListener {
                     override fun onHistoryItemClick(word: String) {
                         parentFragmentManager.beginTransaction()
                             .replace(R.id.main_container, ResultFragment.newInstance(word))

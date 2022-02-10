@@ -1,18 +1,7 @@
 package com.artushock.artushockenglishdictionary.koin
 
 import androidx.room.Room
-import com.artushock.artushockenglishdictionary.DictionaryApplication
-import com.artushock.artushockenglishdictionary.data.repository.Repository
-import com.artushock.artushockenglishdictionary.data.repository.RepositoryImpl
-import com.artushock.artushockenglishdictionary.data.repository.local.LocalRepository
-import com.artushock.artushockenglishdictionary.data.repository.local.RoomImpl
-import com.artushock.artushockenglishdictionary.data.repository.local.room.HistoryDataBase
-import com.artushock.artushockenglishdictionary.data.repository.local.room.HistoryEntity
-import com.artushock.artushockenglishdictionary.data.repository.remote.RemoteRepository
-import com.artushock.artushockenglishdictionary.data.repository.remote.RetrofitImpl
-import com.artushock.artushockenglishdictionary.data.repository.remote.data.RemoteDataModel
 import com.artushock.artushockenglishdictionary.entities.AppState
-import com.artushock.artushockenglishdictionary.entities.DataModel
 import com.artushock.artushockenglishdictionary.interactors.HistoryInteractor
 import com.artushock.artushockenglishdictionary.interactors.HistoryInteractorImpl
 import com.artushock.artushockenglishdictionary.interactors.ResultInteractor
@@ -20,6 +9,16 @@ import com.artushock.artushockenglishdictionary.interactors.ResultInteractorImpl
 import com.artushock.artushockenglishdictionary.presenters.*
 import com.artushock.artushockenglishdictionary.ui.HistoryView
 import com.artushock.artushockenglishdictionary.ui.ResultView
+import com.artushock.models.entities.DataModel
+import com.artushock.repository.repository.Repository
+import com.artushock.repository.repository.RepositoryImpl
+import com.artushock.repository.repository.local.LocalRepository
+import com.artushock.repository.repository.local.room.HistoryDataBase
+import com.artushock.repository.repository.local.room.HistoryEntity
+import com.artushock.repository.repository.remote.RemoteRepository
+import com.artushock.repository.repository.remote.RetrofitImpl
+import com.artushock.repository.repository.remote.data.RemoteDataModel
+import com.artushock.repository.repository.remote.data.RoomImpl
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.dsl.bind
 import org.koin.dsl.module

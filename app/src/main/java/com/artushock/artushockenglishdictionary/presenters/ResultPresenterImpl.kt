@@ -9,7 +9,7 @@ class ResultPresenterImpl(
     private val interactor: ResultInteractor<AppState>,
 ) : ResultPresenter<ResultView> {
 
-    private var currentView: ResultView? =null
+    private var currentView: ResultView? = null
 
     private val resultPresenterCoroutineScope = CoroutineScope(
         Dispatchers.Main
