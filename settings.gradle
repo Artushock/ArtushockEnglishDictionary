@@ -8,3 +8,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ArtushockEnglishDictionary"
 include ':app'
+include ':repository'
+include ':models'

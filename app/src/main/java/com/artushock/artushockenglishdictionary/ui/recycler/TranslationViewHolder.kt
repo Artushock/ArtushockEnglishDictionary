@@ -5,7 +5,6 @@ import android.media.MediaPlayer
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.artushock.artushockenglishdictionary.R
 import com.artushock.artushockenglishdictionary.databinding.ResultItemBinding
 import com.artushock.artushockenglishdictionary.ui.model.Translation
 import com.bumptech.glide.Glide
