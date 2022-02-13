@@ -5,22 +5,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.artushock.artushockenglishdictionary.databinding.ResultFragmentBinding
+import androidx.recyclerview.widget.RecyclerView
+import com.artushock.artushockenglishdictionary.R
 import com.artushock.artushockenglishdictionary.entities.AppState
 import com.artushock.artushockenglishdictionary.ui.model.Mapper
 import com.artushock.artushockenglishdictionary.ui.model.Translation
 import com.artushock.artushockenglishdictionary.ui.recycler.ResultAdapter
+import com.artushock.artushockenglishdictionary.utils.viewById
 import java.util.*
 
 class ResultFragment : BaseResultFragment(), ResultView {
 
-    private var _binding: ResultFragmentBinding? = null
-    private val binding get() = _binding!!
-
     private var adapter: ResultAdapter? = null
     private var word: String? = null
     private var translations: List<Translation>? = null
+
+    private val recyclerView by viewById<RecyclerView>(R.id.result_fragment_recycler_view)
+    private val errorContainer by viewById<LinearLayout>(R.id.result_fragment_error_container)
+    private val progressBar by viewById<ProgressBar>(R.id.result_fragment_progress_bar)
+    private val errorText by viewById<TextView>(R.id.result_fragment_error_text)
+    private val reloadButton by viewById<Button>(R.id.result_fragment_error_reload_button)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +44,7 @@ class ResultFragment : BaseResultFragment(), ResultView {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-
-        _binding = ResultFragmentBinding.inflate(inflater, container, false)
-        return binding.root
+        return inflater.inflate(R.layout.result_fragment, container, false)
     }
 
     private fun getWordForTranslation(): String {
@@ -82,7 +89,7 @@ class ResultFragment : BaseResultFragment(), ResultView {
 
     private fun showList(translations: List<Translation>) {
         if (adapter == null) {
-            with(binding.resultFragmentRecyclerView) {
+            with(recyclerView) {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = ResultAdapter(translations)
             }
@@ -93,8 +100,8 @@ class ResultFragment : BaseResultFragment(), ResultView {
 
     override fun showError(errorMessage: String) {
         showErrorView()
-        binding.resultFragmentErrorText.text = errorMessage
-        binding.resultFragmentErrorReloadButton.setOnClickListener(getReloadListener())
+        errorText.text = errorMessage
+        reloadButton.setOnClickListener(getReloadListener())
     }
 
     private fun getReloadListener() = OnClickListener {
@@ -109,22 +116,22 @@ class ResultFragment : BaseResultFragment(), ResultView {
     }
 
     private fun showViewSuccess() {
-        binding.resultFragmentRecyclerView.visibility = VISIBLE
-        binding.resultFragmentErrorContainer.visibility = GONE
-        binding.resultFragmentProgressBar.visibility = GONE
+        recyclerView.visibility = VISIBLE
+        errorContainer.visibility = GONE
+        progressBar.visibility = GONE
 
     }
 
     private fun showViewLoading() {
-        binding.resultFragmentRecyclerView.visibility = GONE
-        binding.resultFragmentErrorContainer.visibility = GONE
-        binding.resultFragmentProgressBar.visibility = VISIBLE
+        recyclerView.visibility = GONE
+        errorContainer.visibility = GONE
+        progressBar.visibility = VISIBLE
     }
 
     private fun showErrorView() {
-        binding.resultFragmentRecyclerView.visibility = GONE
-        binding.resultFragmentErrorContainer.visibility = VISIBLE
-        binding.resultFragmentProgressBar.visibility = GONE
+        recyclerView.visibility = GONE
+        errorContainer.visibility = VISIBLE
+        progressBar.visibility = GONE
     }
 
     companion object {

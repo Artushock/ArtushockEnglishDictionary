@@ -4,19 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.artushock.artushockenglishdictionary.R
 import com.artushock.artushockenglishdictionary.data.repository.local.room.HistoryEntity
 import com.artushock.artushockenglishdictionary.databinding.HistoryFragmentBinding
-import com.artushock.artushockenglishdictionary.databinding.ResultFragmentBinding
 import com.artushock.artushockenglishdictionary.ui.recycler.HistoryAdapter
-import com.artushock.artushockenglishdictionary.ui.recycler.ResultAdapter
+import com.artushock.artushockenglishdictionary.utils.viewById
 
 class HistoryFragment : BaseHistoryFragment(), HistoryView {
 
-    private var _binding: HistoryFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val progressBar by viewById<ProgressBar>(R.id.history_fragment_progress_bar)
+    private val recyclerView by viewById<RecyclerView>(R.id.history_fragment_recycler_view)
+    private val errorContainer by viewById<LinearLayout>(R.id.history_fragment_error_container)
+    private val errorText by viewById<TextView>(R.id.history_fragment_error_text)
+    private val reloadButton by viewById<Button>(R.id.history_fragment_error_reload_button)
 
     private var adapter: HistoryAdapter? = null
 
@@ -24,10 +30,9 @@ class HistoryFragment : BaseHistoryFragment(), HistoryView {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding = HistoryFragmentBinding.inflate(inflater, container, false)
-        return binding.root
+        return inflater.inflate(R.layout.history_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,9 +53,9 @@ class HistoryFragment : BaseHistoryFragment(), HistoryView {
 
     override fun showResult(list: List<HistoryEntity>) {
         if (adapter == null) {
-            with(binding.historyFragmentRecyclerView) {
+            with(recyclerView) {
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = HistoryAdapter(list, object : HistoryAdapter.ItemClickListener{
+                adapter = HistoryAdapter(list, object : HistoryAdapter.ItemClickListener {
                     override fun onHistoryItemClick(word: String) {
                         parentFragmentManager.beginTransaction()
                             .replace(R.id.main_container, ResultFragment.newInstance(word))
@@ -65,19 +70,19 @@ class HistoryFragment : BaseHistoryFragment(), HistoryView {
     }
 
     override fun showError(errorMessage: String) {
-        binding.historyFragmentProgressBar.visibility = View.GONE
-        binding.historyFragmentRecyclerView.visibility = View.GONE
-        binding.historyFragmentErrorContainer.visibility = View.VISIBLE
-        binding.historyFragmentErrorText.text = errorMessage
-        binding.historyFragmentErrorReloadButton.setOnClickListener {
+        progressBar.visibility = View.GONE
+        recyclerView.visibility = View.GONE
+        errorContainer.visibility = View.VISIBLE
+        errorText.text = errorMessage
+        reloadButton.setOnClickListener {
             presenter.showHistory()
         }
 
     }
 
     override fun showProgress() {
-        binding.historyFragmentProgressBar.visibility = View.VISIBLE
-        binding.historyFragmentRecyclerView.visibility = View.GONE
-        binding.historyFragmentErrorContainer.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+        errorContainer.visibility = View.GONE
     }
 }

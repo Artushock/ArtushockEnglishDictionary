@@ -1,5 +1,6 @@
 package com.artushock.artushockenglishdictionary.ui
 
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import com.artushock.artushockenglishdictionary.presenters.HistoryPresenter
 import com.artushock.artushockenglishdictionary.presenters.ResultPresenter
@@ -11,6 +12,8 @@ import org.koin.core.scope.Scope
 abstract class BaseHistoryFragment : Fragment(), HistoryView, KoinScopeComponent {
     final override val scope: Scope by fragmentScope()
     protected val presenter: HistoryPresenter<HistoryView> by scope.inject()
+
+
 
     override fun onStart() {
         super.onStart()
