@@ -16,7 +16,7 @@ class SearchFragment : Fragment(), SearchView {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         _binding = SearchFragmentBinding.inflate(inflater, container, false)
@@ -30,11 +30,18 @@ class SearchFragment : Fragment(), SearchView {
             val word = binding.searchFragmentTextField.text.toString()
             sendRequest(word)
         }
+
+        binding.searchFragmentHistoryButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_container, HistoryFragment.newInstance())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     override fun sendRequest(word: String) {
         parentFragmentManager.beginTransaction()
-            .replace(R.id.main_container, ResultFragment(word))
+            .replace(R.id.main_container, ResultFragment.newInstance(word))
             .addToBackStack(null)
             .commit()
     }

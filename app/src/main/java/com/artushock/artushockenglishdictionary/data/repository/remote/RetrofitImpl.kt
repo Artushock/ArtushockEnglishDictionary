@@ -1,18 +1,18 @@
 package com.artushock.artushockenglishdictionary.data.repository.remote
 
 import com.artushock.artushockenglishdictionary.data.repository.remote.data.RemoteDataModel
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import io.reactivex.Observable
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitImpl : RemoteRepository {
+class RetrofitImpl : RemoteRepository<List<RemoteDataModel>> {
 
-    override fun getTranslations(word: String): Observable<List<RemoteDataModel>> {
-        return getService(BaseInterceptor.interceptor).search(word)
+    override suspend fun getTranslations(word: String): List<RemoteDataModel> {
+        val service = getService(BaseInterceptor.interceptor)
+        return service.searchAsync(word).await()
     }
 
     private fun getService(interceptor: Interceptor): ApiService {
@@ -23,7 +23,7 @@ class RetrofitImpl : RemoteRepository {
         return Retrofit.Builder()
             .baseUrl(BASE_URL_LOCATIONS)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .client(createOkHttpClient(interceptor))
             .build()
     }
