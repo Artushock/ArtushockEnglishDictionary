@@ -14,6 +14,16 @@ class DictionaryApplication : Application() {
 
             androidContext(this@DictionaryApplication)
             modules(application)
+
+            instance = this@DictionaryApplication
+        }
+    }
+
+    companion object {
+        private lateinit var instance: DictionaryApplication
+
+        fun getAppContext(): Context {
+            return instance.applicationContext
         }
     }
 }
