@@ -1,7 +1,6 @@
 package com.artushock.artushockenglishdictionary.koin
 
 import androidx.room.Room
-import com.artushock.artushockenglishdictionary.DictionaryApplication
 import com.artushock.artushockenglishdictionary.data.repository.Repository
 import com.artushock.artushockenglishdictionary.data.repository.RepositoryImpl
 import com.artushock.artushockenglishdictionary.data.repository.local.LocalRepository
@@ -18,9 +17,12 @@ import com.artushock.artushockenglishdictionary.interactors.HistoryInteractorImp
 import com.artushock.artushockenglishdictionary.interactors.ResultInteractor
 import com.artushock.artushockenglishdictionary.interactors.ResultInteractorImpl
 import com.artushock.artushockenglishdictionary.presenters.*
+import com.artushock.artushockenglishdictionary.ui.HistoryFragment
 import com.artushock.artushockenglishdictionary.ui.HistoryView
+import com.artushock.artushockenglishdictionary.ui.ResultFragment
 import com.artushock.artushockenglishdictionary.ui.ResultView
 import io.reactivex.disposables.CompositeDisposable
+import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -37,23 +39,27 @@ val application = module {
         RetrofitImpl()
     }
 
-
-
     factory<Repository<List<DataModel>, List<HistoryEntity>>> {
         RepositoryImpl(
             localRepository = get(),
             remoteRepository = get())
     }
 
-    factory<ResultInteractor<AppState>> { ResultInteractorImpl(get()) }
+    scope(named<HistoryFragment>()) {
 
-    factory<HistoryInteractor<List<HistoryEntity>>> { HistoryInteractorImpl(get()) }
+        factory<HistoryInteractor<List<HistoryEntity>>> { HistoryInteractorImpl(get()) }
+
+        factory<HistoryPresenter<HistoryView>> { HistoryPresenterImpl(get()) }
+    }
+
+    scope(named<ResultFragment>()) {
+
+        factory<ResultInteractor<AppState>> { ResultInteractorImpl(get()) }
+
+        factory<ResultPresenter<ResultView>> { ResultPresenterImpl(get()) }
+    }
 
     factory { CompositeDisposable() }
 
     factory { SchedulerProviderImpl() } bind SchedulerProvider::class
-
-    factory<ResultPresenter<ResultView>> { ResultPresenterImpl(get()) }
-
-    factory<HistoryPresenter<HistoryView>> { HistoryPresenterImpl(get()) }
 }
